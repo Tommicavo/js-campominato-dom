@@ -27,10 +27,23 @@ playButton.addEventListener("click", function(){
             bombs.push(bomb);
         }
         console.log(bombs);
+        return bombs
+    }
+
+    const gameOver = (bombList) => {
+        const allCells = document.querySelectorAll(".cell");
+        for (let i = 0; i < allCells.length; i++){
+            allCells[i].classList.add("clicked");
+            if (bombList.includes(parseInt(allCells[i].innerText))){
+                allCells[i].classList.add("bomb");
+            }
+        }
     }
 
     // init grid
     grid.innerHTML = "";
+    let youLose = false;
+    let youWin = false;
     
     const selectValue = selectField.value;
     let numCells = 100;
@@ -46,7 +59,8 @@ playButton.addEventListener("click", function(){
         widthClass = "hard";
     }
 
-    generateBombs(numBombs, numCells);
+    const maxScore = numCells - numBombs;
+    const bombList = generateBombs(numBombs, numCells);
 
     // create cell
     for (let i = 0; i < numCells; i++){
@@ -55,17 +69,25 @@ playButton.addEventListener("click", function(){
             
             if (cell.classList.contains("clicked")) return
             cell.classList.add("clicked");
-            score += 1;
-            scoreField.innerText = score;
-
-            
 
 
+            const cellValue = parseInt(cell.innerText);
+            console.log(`Hai cliccato: ${cellValue}`);
 
-
-
-            
-            
+            if (bombList.includes(cellValue)){
+                cell.classList.add("bomb");
+                youLose = true;
+                alert(`Hai perso!\nScore: ${score}`);
+            }
+            else{
+                score += 1;
+                scoreField.innerText = score;
+                if (score === maxScore){
+                    youWin = true;
+                    alert(`Hai vinto!\nScore: ${score}`);
+                }
+            }
+            if (youWin || youLose) gameOver(bombList);
         });
         grid.appendChild(cell);
     }

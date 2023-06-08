@@ -59,4 +59,8 @@ main{
     cursor: not-allowed;
 }
 
+.bomb{
+    background-color: red;
+}
+
 
