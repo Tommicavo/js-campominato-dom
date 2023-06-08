@@ -56,17 +56,12 @@ playButton.addEventListener("click", function(){
         }
     }
 
-    const clickCell = (event, bombList) => {
-        const cell = event.target;
-        
-        if (cell.classList.contains("clicked")) return
-        cell.classList.add("clicked");
-
+    const isGood = (cell, bombList) => {
         const cellValue = parseInt(cell.innerText);
         console.log(`Hai cliccato: ${cellValue}`);
 
-        if (bombList.includes(cellValue)) return true
-        else return false
+        if (bombList.includes(cellValue)) return false
+        else return true
     }
 
     // init
@@ -83,30 +78,33 @@ playButton.addEventListener("click", function(){
 
     // bombs
     const bombList = generateBombs(numBombs, numCells);
-
+    
     // cells
     for (let i = 0; i < numCells; i++){
         const cell = createCell(i + 1);
         
-        cell.addEventListener("click", (event) => {const isGoodCell = clickCell(event, bombList)});
-        console.log(isGoodCell);
-        
-        if (isGoodCell){
-            score += 1;
-            console.log(`score: `, score);
-            scoreField.innerText = score;
-            if (score === maxScore){
-                youWin = true;
-                alert(`Hai vinto!\nScore: ${score}`);
-            }
-        }
-        else {
-            cell.classList.add("bomb");
-            youLose = true;
-            alert(`Hai perso!\nScore: ${score}`);           
-        }
-        if (youWin || youLose) gameOver(bombList);
+        cell.addEventListener("click", (event) => {
+            const cell = event.target;
+            if (cell.classList.contains("clicked")) return
+            cell.classList.add("clicked");
 
+            if (isGood(cell, bombList)){
+                score += 1;
+                console.log(`score: `, score);
+                scoreField.innerText = score;
+                if (score === maxScore){
+                    youWin = true;
+                    alert(`Hai vinto!\nScore: ${score}`);
+                }
+            }
+            else {
+                cell.classList.add("bomb");
+                youLose = true;
+                alert(`Hai perso!\nScore: ${score}`);           
+            }
+            if (youWin || youLose) gameOver(bombList);
+        });
+        
         grid.appendChild(cell);
     }
 });
