@@ -57,11 +57,38 @@ playButton.addEventListener("click", function(){
         }
     }
 
+    const clickCell = (event, bombList) => {
+        const cell = event.target;
+        console.log(`score: `, score);
+
+        if (cell.classList.contains("clicked")) return
+        cell.classList.add("clicked");
+
+        const cellValue = parseInt(cell.innerText);
+        console.log(`Hai cliccato: ${cellValue}`);
+
+        if (bombList.includes(cellValue)){
+            cell.classList.add("bomb");
+            youLose = true;
+            alert(`Hai perso!\nScore: ${score}`);
+        }
+        else{
+            score += 1;
+            scoreField.innerText = score;
+            if (score === maxScore){
+                youWin = true;
+                alert(`Hai vinto!\nScore: ${score}`);
+            }
+        }
+        if (youWin || youLose) gameOver(bombList);
+    }
+
     // init
     grid.innerHTML = "";
     let youLose = false;
     let youWin = false;
     let score = 0;
+    scoreField.innerText = score;
 
     // difficulty mode
     const selectValue = selectField.value;
@@ -74,30 +101,9 @@ playButton.addEventListener("click", function(){
     // cells
     for (let i = 0; i < numCells; i++){
         const cell = createCell(i + 1);
-        cell.addEventListener("click", function(){
-            
-            if (cell.classList.contains("clicked")) return
-            cell.classList.add("clicked");
+        
+        cell.addEventListener("click", (event) => {clickCell(event, bombList)});
 
-
-            const cellValue = parseInt(cell.innerText);
-            console.log(`Hai cliccato: ${cellValue}`);
-
-            if (bombList.includes(cellValue)){
-                cell.classList.add("bomb");
-                youLose = true;
-                alert(`Hai perso!\nScore: ${score}`);
-            }
-            else{
-                score += 1;
-                scoreField.innerText = score;
-                if (score === maxScore){
-                    youWin = true;
-                    alert(`Hai vinto!\nScore: ${score}`);
-                }
-            }
-            if (youWin || youLose) gameOver(bombList);
-        });
         grid.appendChild(cell);
     }
 });
