@@ -1,5 +1,6 @@
 :root{
     --header_height: 80px;
+    --cellDimensions: calc(100% / 10);
 }
 
 /* Generics */
@@ -40,17 +41,9 @@ main{
     cursor: pointer;
 }
 
-.easy{
-    flex-basis: 10%;
-    height: 10%;
-}
-.medium{
-    flex-basis: calc(100% / 9);
-    height: calc(100% / 9);
-}
-.hard{
-    flex-basis: calc(100% / 7);
-    height: calc(100% / 7);
+.cellLength{
+    flex-basis: var(--cellDimensions);
+    height: var(--cellDimensions);
 }
 
 .clicked{
@@ -59,7 +52,7 @@ main{
     cursor: not-allowed;
 }
 
-.bomb{
+.clicked.bomb{
     background-color: red;
 }
 

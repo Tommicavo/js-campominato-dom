@@ -6,13 +6,30 @@ const selectField = document.getElementById("select");
 const playButton = document.getElementById("play");
 const scoreField = document.getElementById("scoreField");
 const numBombs = 16;
-
+const root = document.querySelector(":root");
 
 playButton.addEventListener("click", function(){
 
-    const createCell = (value, cellClass) => {
+    const setDifficulty = (level, root) => {
+        let numCells = 0;
+        if (level === "0"){
+            numCells = 100;
+            root.style.setProperty("--cellDimensions", "calc(100% / 10)");
+        }
+        else if (level === "1"){
+            numCells = 81;
+            root.style.setProperty("--cellDimensions", "calc(100% / 9)");
+        }
+        else if (level === "2"){
+            numCells = 49;
+            root.style.setProperty("--cellDimensions", "calc(100% / 7)");
+        }
+        return numCells
+    }
+
+    const createCell = (value) => {
         const node = document.createElement("div");
-        node.classList.add("cell", cellClass);
+        node.classList.add("cell", "cellLength");
         node.innerText = value;
         return node
     }
@@ -40,31 +57,23 @@ playButton.addEventListener("click", function(){
         }
     }
 
-    // init grid
+    // init
     grid.innerHTML = "";
     let youLose = false;
     let youWin = false;
-    
-    const selectValue = selectField.value;
-    let numCells = 100;
-    let widthClass = "easy";
     let score = 0;
-    
-    if (selectValue === "1"){
-        numCells = 81;
-        widthClass = "medium";
-    }
-    else if (selectValue === "2"){
-        numCells = 49;
-        widthClass = "hard";
-    }
 
+    // difficulty mode
+    const selectValue = selectField.value;
+    const numCells = setDifficulty(selectValue, root);
     const maxScore = numCells - numBombs;
+
+    // bombs
     const bombList = generateBombs(numBombs, numCells);
 
-    // create cell
+    // cells
     for (let i = 0; i < numCells; i++){
-        const cell = createCell(i + 1, widthClass);
+        const cell = createCell(i + 1);
         cell.addEventListener("click", function(){
             
             if (cell.classList.contains("clicked")) return
