@@ -55,7 +55,12 @@ playButton.addEventListener("click", function(){
             
             if (cell.classList.contains("clicked")) return
             cell.classList.add("clicked");
-            console.log(`Hai cliccato: ${i + 1}`);
+            score += 1;
+            scoreField.innerText = score;
+
+            
+
+
 
 
 
