@@ -1,6 +1,5 @@
 console.log("js ok");
 
-
 const grid = document.getElementById("grid");
 const selectField = document.getElementById("select");
 const playButton = document.getElementById("play");
@@ -59,28 +58,15 @@ playButton.addEventListener("click", function(){
 
     const clickCell = (event, bombList) => {
         const cell = event.target;
-        console.log(`score: `, score);
-
+        
         if (cell.classList.contains("clicked")) return
         cell.classList.add("clicked");
 
         const cellValue = parseInt(cell.innerText);
         console.log(`Hai cliccato: ${cellValue}`);
 
-        if (bombList.includes(cellValue)){
-            cell.classList.add("bomb");
-            youLose = true;
-            alert(`Hai perso!\nScore: ${score}`);
-        }
-        else{
-            score += 1;
-            scoreField.innerText = score;
-            if (score === maxScore){
-                youWin = true;
-                alert(`Hai vinto!\nScore: ${score}`);
-            }
-        }
-        if (youWin || youLose) gameOver(bombList);
+        if (bombList.includes(cellValue)) return true
+        else return false
     }
 
     // init
@@ -102,7 +88,24 @@ playButton.addEventListener("click", function(){
     for (let i = 0; i < numCells; i++){
         const cell = createCell(i + 1);
         
-        cell.addEventListener("click", (event) => {clickCell(event, bombList)});
+        cell.addEventListener("click", (event) => {const isGoodCell = clickCell(event, bombList)});
+        console.log(isGoodCell);
+        
+        if (isGoodCell){
+            score += 1;
+            console.log(`score: `, score);
+            scoreField.innerText = score;
+            if (score === maxScore){
+                youWin = true;
+                alert(`Hai vinto!\nScore: ${score}`);
+            }
+        }
+        else {
+            cell.classList.add("bomb");
+            youLose = true;
+            alert(`Hai perso!\nScore: ${score}`);           
+        }
+        if (youWin || youLose) gameOver(bombList);
 
         grid.appendChild(cell);
     }
