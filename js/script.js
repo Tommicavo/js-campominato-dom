@@ -26,13 +26,6 @@ playButton.addEventListener("click", function(){
         return numCells
     }
 
-    const createCell = (value) => {
-        const node = document.createElement("div");
-        node.classList.add("cell", "cellLength");
-        node.innerText = value;
-        return node
-    }
-
     const generateBombs = (numBombs, maxValueBomb) => {
         const bombs = [];
         let bomb;
@@ -46,6 +39,21 @@ playButton.addEventListener("click", function(){
         return bombs
     }
 
+    const createCell = (value) => {
+        const node = document.createElement("div");
+        node.classList.add("cell", "cellLength");
+        node.innerText = value;
+        return node
+    }
+
+    const isGoodCell = (cell, bombList) => {
+        const cellValue = parseInt(cell.innerText);
+        console.log(`Hai cliccato: ${cellValue}`);
+
+        if (bombList.includes(cellValue)) return false
+        else return true
+    }
+
     const gameOver = (bombList) => {
         const allCells = document.querySelectorAll(".cell");
         for (let i = 0; i < allCells.length; i++){
@@ -56,12 +64,26 @@ playButton.addEventListener("click", function(){
         }
     }
 
-    const isGood = (cell, bombList) => {
-        const cellValue = parseInt(cell.innerText);
-        console.log(`Hai cliccato: ${cellValue}`);
-
-        if (bombList.includes(cellValue)) return false
-        else return true
+    const eventCellFun = (event, bombList) => {
+        const cell = event.target;
+        if (cell.classList.contains("clicked")) return
+        cell.classList.add("clicked");
+    
+        if (isGoodCell(cell, bombList)){
+            score += 1;
+            console.log(`score: `, score);
+            scoreField.innerText = score;
+            if (score === maxScore){
+                youWin = true;
+                alert(`Hai vinto!\nScore: ${score}`);
+            }
+        }
+        else {
+            cell.classList.add("bomb");
+            youLose = true;
+            alert(`Hai perso!\nScore: ${score}`);           
+        }
+        if (youWin || youLose) gameOver(bombList);
     }
 
     // init
@@ -83,27 +105,7 @@ playButton.addEventListener("click", function(){
     for (let i = 0; i < numCells; i++){
         const cell = createCell(i + 1);
         
-        cell.addEventListener("click", (event) => {
-            const cell = event.target;
-            if (cell.classList.contains("clicked")) return
-            cell.classList.add("clicked");
-
-            if (isGood(cell, bombList)){
-                score += 1;
-                console.log(`score: `, score);
-                scoreField.innerText = score;
-                if (score === maxScore){
-                    youWin = true;
-                    alert(`Hai vinto!\nScore: ${score}`);
-                }
-            }
-            else {
-                cell.classList.add("bomb");
-                youLose = true;
-                alert(`Hai perso!\nScore: ${score}`);           
-            }
-            if (youWin || youLose) gameOver(bombList);
-        });
+        cell.addEventListener("click", (event) => {eventCellFun(event, bombList)});
         
         grid.appendChild(cell);
     }
