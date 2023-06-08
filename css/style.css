@@ -1,0 +1,62 @@
+:root{
+    --header_height: 80px;
+}
+
+/* Generics */
+header{
+    height: 80px;
+    padding: 0 2rem;
+}
+
+main{
+    background-color: aquamarine;
+    height: 100vh;
+}
+
+/* Utils */
+.myContainer{
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 50px 0
+}
+
+#grid{
+    width: 600px;
+    height: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    /* border: 1px solid black; */
+}
+
+.cell{
+    border: 1px solid black;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.easy{
+    flex-basis: 10%;
+    height: 10%;
+}
+.medium{
+    flex-basis: calc(100% / 9);
+    height: calc(100% / 9);
+}
+.hard{
+    flex-basis: calc(100% / 7);
+    height: calc(100% / 7);
+}
+
+.clicked{
+    background-color: blue;
+    color: white;
+    cursor: not-allowed;
+}
+
+
